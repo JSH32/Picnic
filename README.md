@@ -9,12 +9,13 @@ Picnic is a simple framework for making discord bots. It uses Javascript for com
 
 ## Roadmap
 
-- [ ] Lua virtual machine
-  - [ ] Sending messages
+- [x] Javascript virtual machine
+  - [x] Sending messages
     - [ ] Sending embeds
   - [ ] Attachables
-  - [ ] User table
+  - [ ] User object
+  - [x] Message object
   - [ ] Markdown
-  - [ ] Command system
-    - [ ] Command arguments
+  - [x] Command system
+    - [x] Command arguments
   - [ ] Listener system
