@@ -72,6 +72,6 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 		})
 
 		// execute the command
-		runtime.Execute(command.Command)
+		runtime.Execute(command)
 	}
 }

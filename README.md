@@ -43,7 +43,7 @@ discord.sendMessage(args.channel.id, args.message.content)
 There is no console class, it has been replaced with `logger`. The `discord` object is used for most discord detached library methods that do not depend on other data. The `args` object is passed in by default to each module and contains info about the command context.
 
 ### The VM
-The Javascript virtual machine that Picnic uses is only ECMA5.1 compatible as of right now. So all ECMA6 features are not supported. You can use `require` to require different files in a module. The starting path for require is the picnic executable location, it is not relative to the file.
+The Javascript virtual machine that Picnic uses is only ES5.1 compatible by default. To allow ES6 to be usable enable `es6` flag in the `config.yaml` file. This uses babel to compile your scripts into a readable format. This is extremely expiremental and error locations will not reflect the actual place they occur on the script you write.
 
 ## Roadmap
 

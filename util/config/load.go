@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Token  string `yaml:"token"`
 	Prefix string `yaml:"prefix"`
+	ES6    bool   `yaml:"es6"`
 }
 
 // Load : load config file

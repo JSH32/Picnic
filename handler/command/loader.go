@@ -25,7 +25,7 @@ type Command struct {
 }
 
 // Loader : create a command map from loaded commands
-func Loader() Handler {
+func Loader(transpile bool) Handler {
 	files, err := ioutil.ReadDir("./commands")
 	if err != nil {
 		logger.Panic(err.Error())
@@ -60,37 +60,41 @@ func Loader() Handler {
 			continue
 		}
 
+		var script = string(commandf)
+
 		// ES6/2015 support
-		newscript, err := babel.TransformString(string(commandf), map[string]interface{}{
-			"plugins": []string{
-				"transform-es2015-arrow-functions",
-				"transform-es2015-block-scoped-functions",
-				"transform-es2015-block-scoping",
-				"transform-es2015-classes",
-				"transform-es2015-computed-properties",
-				"transform-es2015-destructuring",
-				"transform-es2015-duplicate-keys",
-				"transform-es2015-for-of",
-				"transform-es2015-function-name",
-				"transform-es2015-instanceof",
-				"transform-es2015-literals",
-				"transform-es2015-object-super",
-				"transform-es2015-parameters",
-				"transform-es2015-shorthand-properties",
-				"transform-es2015-spread",
-				"transform-es2015-sticky-regex",
-				"transform-es2015-template-literals",
-				"transform-es2015-typeof-symbol",
-				"transform-es2015-unicode-regex",
-			},
-		})
-		if err != nil {
-			logger.Error(fmt.Sprintf("Unable to transpile module %s : %s", f.Name(), err.Error()))
-			continue
+		if transpile {
+			script, err = babel.TransformString(string(commandf), map[string]interface{}{
+				"plugins": []string{
+					"transform-es2015-arrow-functions",
+					"transform-es2015-block-scoped-functions",
+					"transform-es2015-block-scoping",
+					"transform-es2015-classes",
+					"transform-es2015-computed-properties",
+					"transform-es2015-destructuring",
+					"transform-es2015-duplicate-keys",
+					"transform-es2015-for-of",
+					"transform-es2015-function-name",
+					"transform-es2015-instanceof",
+					"transform-es2015-literals",
+					"transform-es2015-object-super",
+					"transform-es2015-parameters",
+					"transform-es2015-shorthand-properties",
+					"transform-es2015-spread",
+					"transform-es2015-sticky-regex",
+					"transform-es2015-template-literals",
+					"transform-es2015-typeof-symbol",
+					"transform-es2015-unicode-regex",
+				},
+			})
+			if err != nil {
+				logger.Error(fmt.Sprintf("Unable to transpile module %s : %s", f.Name(), err.Error()))
+				continue
+			}
 		}
 
 		command := Command{
-			Command: newscript,
+			Command: script,
 			Prop:    prop,
 		}
 

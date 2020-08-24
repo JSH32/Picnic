@@ -21,7 +21,7 @@ func main() {
 		return
 	}
 
-	handler := command.Loader()
+	handler := command.Loader(conf.ES6)
 
 	commandlistener := listeners.Command{
 		Commands: handler,

@@ -1,6 +1,9 @@
 package javascript
 
 import (
+	"fmt"
+
+	"github.com/Riku32/Picnic/handler/command"
 	"github.com/Riku32/Picnic/stdlib/logger"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/require"
@@ -32,10 +35,10 @@ func (vm Vm) setglobals() {
 }
 
 // Execute : execute a js script
-func (vm Vm) Execute(script string) {
-	_, err := vm.runtime.RunString(script)
+func (vm Vm) Execute(command command.Command) {
+	_, err := vm.runtime.RunString(command.Command)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(fmt.Sprintf("[%s] %s", command.Prop.Name, err.Error()))
 	}
 }
 
