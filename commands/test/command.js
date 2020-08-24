@@ -1,6 +1,6 @@
-logger.info(message.userid)
-discord.sendMessage(message.channelid, message.content)
+logger.info(args.author.id)
+discord.sendMessage(args.channel.id, args.message.content)
 
-message.args.forEach(function (val, i) {
-    discord.sendMessage(message.channelid, val)
+args.args.forEach(function (val, i) {
+    discord.sendMessage(args.channel.id, val)
 })

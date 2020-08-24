@@ -6,14 +6,14 @@ import "github.com/bwmarrin/discordgo"
 func NewDiscordBind(session *discordgo.Session) Discord {
 	return Discord{
 		session: session,
-		SendMessage: func(channelid, content string) {
-			session.ChannelMessageSend(channelid, content)
-		},
 	}
 }
 
 // Discord : discord lib object
 type Discord struct {
-	session     *discordgo.Session
-	SendMessage func(string, string) `json:"sendMessage"`
+	session *discordgo.Session
+}
+
+func (d Discord) SendMessage(channelid, content string) {
+	d.session.ChannelMessageSend(channelid, content)
 }

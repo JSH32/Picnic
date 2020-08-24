@@ -1,24 +1,29 @@
 package logger
 
-// NewJSLogger : JS bindings for logger
-func NewJSLogger() *struct {
-	Info    func(string) `json:"info"`
-	Error   func(string) `json:"error"`
-	Warn    func(string) `json:"warn"`
-	Success func(string) `json:"success"`
-	Panic   func(string) `json:"panic"`
-} {
-	return &struct {
-		Info    func(string) `json:"info"`
-		Error   func(string) `json:"error"`
-		Warn    func(string) `json:"warn"`
-		Success func(string) `json:"success"`
-		Panic   func(string) `json:"panic"`
-	}{
-		Info:    Info,
-		Error:   Error,
-		Warn:    Warn,
-		Success: Success,
-		Panic:   Panic,
-	}
+type JSLogger struct {
+}
+
+// Info : JS bindings for info log
+func (JSLogger) Info(content string) {
+	Info(content)
+}
+
+// Error : JS bindings for error log
+func (JSLogger) Error(content string) {
+	Error(content)
+}
+
+// Panic : JS bindings for panic log
+func (JSLogger) Panic(content string) {
+	Panic(content)
+}
+
+// Success : JS bindings for success log
+func (JSLogger) Success(content string) {
+	Success(content)
+}
+
+// Warn : JS bindings for warning log
+func (JSLogger) Warn(content string) {
+	Warn(content)
 }

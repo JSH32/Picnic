@@ -46,15 +46,33 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 	if command, ok := c.Registry.GetCommand(invoke); ok {
 		runtime := javascript.NewVM()
 
+		// set discord library object
 		runtime.SetGlobal("discord", discord.NewDiscordBind(s))
 
-		runtime.SetGlobal("message", discord.Message{
-			UserID:    e.Author.ID,
-			MessageID: e.Message.ID,
-			ChannelID: e.ChannelID,
-			Content:   e.Content,
-			Args:      contSplit[1:],
+		// channel object
+		channel := discord.Channel{
+			ID: e.ChannelID,
+		}
+
+		// author user object
+		author := discord.User{
+			ID: e.Author.ID,
+		}
+
+		// set command argument object
+		runtime.SetGlobal("args", discord.Args{
+			Author: author,
+			Message: discord.Message{
+				ID:      e.ID,
+				Channel: channel,
+				Author:  author,
+				Content: e.Content,
+			},
+			Channel: channel,
+			Args:    contSplit[1:],
 		})
+
+		// execute the command
 		runtime.Execute(command.Command)
 	}
 }

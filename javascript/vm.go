@@ -23,7 +23,7 @@ func NewVM() Vm {
 }
 
 func (vm Vm) setglobals() {
-	vm.runtime.Set("logger", logger.NewJSLogger())
+	vm.runtime.Set("logger", logger.JSLogger{})
 }
 
 // Execute : execute a js script
