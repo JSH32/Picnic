@@ -12,7 +12,7 @@ import (
 )
 
 type Command struct {
-	Registry command.Handler
+	Commands command.Handler
 	Prefix   string
 }
 
@@ -42,7 +42,7 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 	invoke := contSplit[0][len(c.Prefix):]
 	invoke = strings.ToLower(invoke)
 
-	if command, ok := c.Registry.GetCommand(invoke); ok {
+	if command, ok := c.Commands.GetCommand(invoke); ok {
 		runtime := javascript.NewVM()
 
 		// set discord library object

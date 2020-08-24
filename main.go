@@ -24,7 +24,7 @@ func main() {
 	handler := command.Loader()
 
 	commandlistener := listeners.Command{
-		Registry: handler,
+		Commands: handler,
 		Prefix:   conf.Prefix,
 	}
 

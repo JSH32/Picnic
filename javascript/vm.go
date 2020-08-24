@@ -3,6 +3,7 @@ package javascript
 import (
 	"github.com/Riku32/Picnic/stdlib/logger"
 	"github.com/dop251/goja"
+	"github.com/dop251/goja_nodejs/require"
 )
 
 type Vm struct {
@@ -10,7 +11,11 @@ type Vm struct {
 }
 
 func NewVM() Vm {
+	registry := new(require.Registry)
 	vm := goja.New()
+
+	registry.Enable(vm)
+
 	vm.SetFieldNameMapper(goja.TagFieldNameMapper("json", true))
 
 	runtime := Vm{
