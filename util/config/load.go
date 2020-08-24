@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Riku32/Picnic/logger"
+	"github.com/Riku32/Picnic/stdlib/logger"
 	"gopkg.in/yaml.v2"
 )
 
 // Config : config object
 type Config struct {
-	Token string `yaml:"token"`
+	Token  string `yaml:"token"`
+	Prefix string `yaml:"prefix"`
 }
 
 // Load : load config file

@@ -1,7 +1,7 @@
 package javascript
 
 import (
-	"github.com/Riku32/Picnic/logger"
+	"github.com/Riku32/Picnic/stdlib/logger"
 	"github.com/dop251/goja"
 )
 

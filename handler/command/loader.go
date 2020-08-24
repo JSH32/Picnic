@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/Riku32/Picnic/logger"
+	"github.com/Riku32/Picnic/stdlib/logger"
 	"gopkg.in/yaml.v2"
 )
 

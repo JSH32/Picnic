@@ -4,15 +4,16 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Riku32/Picnic/discord"
 	"github.com/Riku32/Picnic/handler/command"
 	"github.com/Riku32/Picnic/javascript"
-	"github.com/Riku32/Picnic/logger"
+	"github.com/Riku32/Picnic/stdlib/discord"
+	"github.com/Riku32/Picnic/stdlib/logger"
 	"github.com/bwmarrin/discordgo"
 )
 
 type Command struct {
 	Registry command.Handler
+	Prefix   string
 }
 
 func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
@@ -26,9 +27,7 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 		return
 	}
 
-	prefix := "p!"
-
-	if !strings.HasPrefix(e.Message.Content, prefix) {
+	if !strings.HasPrefix(e.Message.Content, c.Prefix) {
 		return
 	}
 
@@ -40,7 +39,7 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 		}
 	}
 
-	invoke := contSplit[0][len(prefix):]
+	invoke := contSplit[0][len(c.Prefix):]
 	invoke = strings.ToLower(invoke)
 
 	if command, ok := c.Registry.GetCommand(invoke); ok {

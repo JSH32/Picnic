@@ -5,10 +5,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Riku32/Picnic/config"
 	"github.com/Riku32/Picnic/handler/command"
 	"github.com/Riku32/Picnic/listeners"
-	"github.com/Riku32/Picnic/logger"
+	"github.com/Riku32/Picnic/stdlib/logger"
+	"github.com/Riku32/Picnic/util/config"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -25,6 +25,7 @@ func main() {
 
 	commandlistener := listeners.Command{
 		Registry: handler,
+		Prefix:   conf.Prefix,
 	}
 
 	session.AddHandler(commandlistener.Handler)
