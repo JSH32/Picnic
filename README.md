@@ -12,7 +12,7 @@ Picnic is a simple framework for making discord bots. It uses Javascript for com
 - Go 1.14
 - A computer
 
-### Setup
+### Build
 - Clone this repo to your local machine using  `https://github.com/Riku32/Picnic`
 - Build the executable `go build .`
 
