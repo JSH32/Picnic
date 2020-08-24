@@ -4,7 +4,7 @@
 
 ## Description
 
-Picnic is a simple framework for making discord bots. It uses Lua for command and listener scripts. You can easily write and enable/reload scripts live.
+Picnic is a simple framework for making discord bots. It uses Javascript for command and listener scripts. You can easily write and enable/reload scripts live.
 
 
 ## Roadmap
