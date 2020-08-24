@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Riku32/Picnic/stdlib/logger"
+	babel "github.com/jvatic/goja-babel"
 	"gopkg.in/yaml.v2"
 )
 
@@ -59,8 +60,37 @@ func Loader() Handler {
 			continue
 		}
 
+		// ES6/2015 support
+		newscript, err := babel.TransformString(string(commandf), map[string]interface{}{
+			"plugins": []string{
+				"transform-es2015-arrow-functions",
+				"transform-es2015-block-scoped-functions",
+				"transform-es2015-block-scoping",
+				"transform-es2015-classes",
+				"transform-es2015-computed-properties",
+				"transform-es2015-destructuring",
+				"transform-es2015-duplicate-keys",
+				"transform-es2015-for-of",
+				"transform-es2015-function-name",
+				"transform-es2015-instanceof",
+				"transform-es2015-literals",
+				"transform-es2015-object-super",
+				"transform-es2015-parameters",
+				"transform-es2015-shorthand-properties",
+				"transform-es2015-spread",
+				"transform-es2015-sticky-regex",
+				"transform-es2015-template-literals",
+				"transform-es2015-typeof-symbol",
+				"transform-es2015-unicode-regex",
+			},
+		})
+		if err != nil {
+			logger.Error(fmt.Sprintf("Unable to transpile module %s : %s", f.Name(), err.Error()))
+			continue
+		}
+
 		command := Command{
-			Command: string(commandf),
+			Command: newscript,
 			Prop:    prop,
 		}
 
@@ -71,6 +101,8 @@ func Loader() Handler {
 
 		commands[command.Prop.Name] = command
 	}
+
+	logger.Info(fmt.Sprintf("%d commands have been registered!", len(commands)))
 
 	return Handler{
 		Commands: commands,
