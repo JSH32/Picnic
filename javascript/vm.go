@@ -18,18 +18,20 @@ type Vm struct {
 func NewVM() Vm {
 	vm := eventloop.NewEventLoop()
 
-	require := require.NewRegistry()
+	// require.RegisterNativeModule("xf", func(f *goja.Runtime, x *goja.Object) {
+	// 	x.Set("lmao", "sdf")
+	// })
+	nvstore := make(command.ModuleStore)
+	rm := require.NewRegistry(require.WithGlobalFolders("jlib"), require.WithLoader(nvstore.SourceLoader))
 
 	vm.Run(func(vm *goja.Runtime) {
 		vm.SetFieldNameMapper(goja.TagFieldNameMapper("json", true))
-		require.Enable(vm)
+		rm.Enable(vm)
 	})
 
 	runtime := Vm{
 		runtime: vm,
 	}
-
-	runtime.setglobals()
 
 	return runtime
 }

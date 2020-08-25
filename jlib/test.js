@@ -1,5 +1,5 @@
-let test = {
-    func: () => {
+module.exports = {
+    fc: () => {
         logger.info("testing")
     }
 }

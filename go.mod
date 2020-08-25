@@ -9,6 +9,7 @@ require (
 	github.com/dop251/goja v0.0.0-20200824171909-536f9d946569
 	github.com/dop251/goja_nodejs v0.0.0-20200811150831-9bc458b4bbeb
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
+	github.com/markbates/pkger v0.17.0
 	golang.org/x/text v0.3.3 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )

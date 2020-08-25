@@ -7,6 +7,7 @@ import (
 
 	"github.com/Riku32/Picnic/stdlib/logger"
 	babel "github.com/Riku32/goja-babel"
+	"github.com/dop251/goja_nodejs/require"
 	"gopkg.in/yaml.v2"
 )
 
@@ -64,6 +65,28 @@ type Command struct {
 	Command string
 }
 
+// ModuleStore : store for native javascript modules
+type ModuleStore map[string]string
+
+// SourceLoader : loader for loading native javascript modules
+func (m ModuleStore) SourceLoader(filename string) ([]byte, error) {
+	if data, ok := m[filename]; ok {
+		return []byte(data), nil
+	}
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, require.ModuleFileDoesNotExistError
+	}
+	script, err := babel.TransformString(string(data), map[string]interface{}{
+		"plugins": append(es6plugin, minifyplugin...),
+	})
+	if err != nil {
+		logger.Panic(fmt.Sprintf("Unable to compile stdlib %s : %s", filename, err.Error()))
+	}
+	m[filename] = script
+	return []byte(script), nil
+}
+
 // Loader : create a command map from loaded commands
 func Loader(transpile bool) Handler {
 	/*
@@ -76,29 +99,29 @@ func Loader(transpile bool) Handler {
 		logger.Panic(err.Error())
 	}
 
-	var libprepack string
+	// var libprepack string
 
-	for _, f := range files {
-		if f.IsDir() {
-			logger.Warn(fmt.Sprintf("%s is a directory", f.Name()))
-			continue
-		}
+	// for _, f := range files {
+	// 	if f.IsDir() {
+	// 		logger.Warn(fmt.Sprintf("%s is a directory", f.Name()))
+	// 		continue
+	// 	}
 
-		scriptr, err := ioutil.ReadFile(fmt.Sprintf("./jlib/%s", f.Name()))
-		if err != nil {
-			logger.Warn(fmt.Sprintf("Unable to read script %s", f.Name()))
-			continue
-		}
+	// 	scriptr, err := ioutil.ReadFile(fmt.Sprintf("./jlib/%s", f.Name()))
+	// 	if err != nil {
+	// 		logger.Warn(fmt.Sprintf("Unable to read script %s", f.Name()))
+	// 		continue
+	// 	}
 
-		libprepack += string(scriptr)
-	}
+	// 	libprepack += string(scriptr)
+	// }
 
-	jlib, err := babel.TransformString(string(libprepack), map[string]interface{}{
-		"plugins": append(es6plugin, minifyplugin...),
-	})
-	if err != nil {
-		logger.Panic("Unable to compile standard library : " + err.Error())
-	}
+	// jlib, err := babel.TransformString(string(libprepack), map[string]interface{}{
+	// 	"plugins": append(es6plugin, minifyplugin...),
+	// })
+	// if err != nil {
+	// 	logger.Panic("Unable to compile standard library : " + err.Error())
+	// }
 
 	/*
 		Read command scripts
@@ -152,7 +175,7 @@ func Loader(transpile bool) Handler {
 		}
 
 		command := Command{
-			Command: jlib + script,
+			Command: script,
 			Prop:    prop,
 		}
 

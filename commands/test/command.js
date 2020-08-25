@@ -1,23 +1,26 @@
-logger.info(args.author.id)
-discord.sendMessage(args.channel.id, args.message.content)
+const t = require("test")
 
-test.func()
+// logger.info(args.author.id)
+// discord.sendMessage(args.channel.id, args.message.content)
+t.fc()
 
-args.args.forEach((val) => {
-    discord.sendMessage(args.channel.id, val)
-})
 
-let res = http.post("https://waifu.pics/api/many/sfw", JSON.stringify({
-    exclude: []
-}))
+//logger.info(xf.lmao)
+// args.args.forEach((val) => {
+//     discord.sendMessage(args.channel.id, val)
+// })
 
-let v = new discord.embed()
-    .setTitle("sdf")
-    .setDescription("lmao")
+// let res = http.post("https://waifu.pics/api/many/sfw", JSON.stringify({
+//     exclude: []
+// }))
 
-logger.info(v.title)
+// let v = new discord.embed()
+//     .setTitle("sdf")
+//     .setDescription("lmao")
 
-discord.sendEmbed(args.channel.id, v)
-// v.title = "fsd"
+// logger.info(v.title)
 
-// v.send(args.channel.id)
+// discord.sendEmbed(args.channel.id, v)
+// // v.title = "fsd"
+
+// // v.send(args.channel.id)
