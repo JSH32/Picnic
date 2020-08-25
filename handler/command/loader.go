@@ -6,8 +6,48 @@ import (
 	"os"
 
 	"github.com/Riku32/Picnic/stdlib/logger"
-	babel "github.com/jvatic/goja-babel"
+	babel "github.com/Riku32/goja-babel"
 	"gopkg.in/yaml.v2"
+)
+
+var (
+	es6plugin = []string{
+		"transform-es2015-arrow-functions",
+		"transform-es2015-block-scoped-functions",
+		"transform-es2015-block-scoping",
+		"transform-es2015-classes",
+		"transform-es2015-computed-properties",
+		"transform-es2015-destructuring",
+		"transform-es2015-duplicate-keys",
+		"transform-es2015-for-of",
+		"transform-es2015-function-name",
+		"transform-es2015-instanceof",
+		"transform-es2015-literals",
+		"transform-es2015-object-super",
+		"transform-es2015-parameters",
+		"transform-es2015-shorthand-properties",
+		"transform-es2015-spread",
+		"transform-es2015-sticky-regex",
+		"transform-es2015-template-literals",
+		"transform-es2015-typeof-symbol",
+		"transform-es2015-unicode-regex",
+	}
+	minifyplugin = []string{
+		"transform-inline-environment-variables",
+		"transform-member-expression-literals",
+		"transform-merge-sibling-variables",
+		"transform-minify-booleans",
+		"minify-constant-folding",
+		"minify-dead-code-elimination",
+		"minify-flip-comparisons",
+		"minify-guarded-expressions",
+		"minify-infinity",
+		"minify-numeric-literals",
+		"minify-replace",
+		"minify-simplify",
+		"minify-type-constructors",
+		"transform-property-literals",
+	}
 )
 
 // Prop : command property object
@@ -26,7 +66,45 @@ type Command struct {
 
 // Loader : create a command map from loaded commands
 func Loader(transpile bool) Handler {
-	files, err := ioutil.ReadDir("./commands")
+	/*
+		JS standard library initializer
+		This gets minified
+		Included in all files automatically
+	*/
+	files, err := ioutil.ReadDir("./jlib")
+	if err != nil {
+		logger.Panic(err.Error())
+	}
+
+	var libprepack string
+
+	for _, f := range files {
+		if f.IsDir() {
+			logger.Warn(fmt.Sprintf("%s is a directory", f.Name()))
+			continue
+		}
+
+		scriptr, err := ioutil.ReadFile(fmt.Sprintf("./jlib/%s", f.Name()))
+		if err != nil {
+			logger.Warn(fmt.Sprintf("Unable to read script %s", f.Name()))
+			continue
+		}
+
+		libprepack += string(scriptr)
+	}
+
+	jlib, err := babel.TransformString(string(libprepack), map[string]interface{}{
+		"plugins": append(es6plugin, minifyplugin...),
+	})
+	if err != nil {
+		logger.Panic("Unable to compile standard library : " + err.Error())
+	}
+
+	/*
+		Read command scripts
+		This gets optionally babel packed
+	*/
+	files, err = ioutil.ReadDir("./commands")
 	if err != nil {
 		logger.Panic(err.Error())
 	}
@@ -65,27 +143,7 @@ func Loader(transpile bool) Handler {
 		// ES6/2015 support
 		if transpile {
 			script, err = babel.TransformString(string(commandf), map[string]interface{}{
-				"plugins": []string{
-					"transform-es2015-arrow-functions",
-					"transform-es2015-block-scoped-functions",
-					"transform-es2015-block-scoping",
-					"transform-es2015-classes",
-					"transform-es2015-computed-properties",
-					"transform-es2015-destructuring",
-					"transform-es2015-duplicate-keys",
-					"transform-es2015-for-of",
-					"transform-es2015-function-name",
-					"transform-es2015-instanceof",
-					"transform-es2015-literals",
-					"transform-es2015-object-super",
-					"transform-es2015-parameters",
-					"transform-es2015-shorthand-properties",
-					"transform-es2015-spread",
-					"transform-es2015-sticky-regex",
-					"transform-es2015-template-literals",
-					"transform-es2015-typeof-symbol",
-					"transform-es2015-unicode-regex",
-				},
+				"plugins": es6plugin,
 			})
 			if err != nil {
 				logger.Error(fmt.Sprintf("Unable to transpile module %s : %s", f.Name(), err.Error()))
@@ -94,7 +152,7 @@ func Loader(transpile bool) Handler {
 		}
 
 		command := Command{
-			Command: script,
+			Command: jlib + script,
 			Prop:    prop,
 		}
 

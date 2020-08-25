@@ -1,6 +1,8 @@
 logger.info(args.author.id)
 discord.sendMessage(args.channel.id, args.message.content)
 
+test.func()
+
 args.args.forEach((val) => {
     discord.sendMessage(args.channel.id, val)
 })
