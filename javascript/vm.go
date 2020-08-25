@@ -6,7 +6,6 @@ import (
 	"github.com/Riku32/Picnic/handler/command"
 	"github.com/Riku32/Picnic/stdlib/http"
 	"github.com/Riku32/Picnic/stdlib/logger"
-	"github.com/Riku32/Picnic/stdlib/test"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/eventloop"
 	"github.com/dop251/goja_nodejs/require"
