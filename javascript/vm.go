@@ -37,7 +37,6 @@ func NewVM() Vm {
 func (vm Vm) setglobals() {
 	vm.SetGlobal("logger", logger.JSLogger{})
 	vm.SetGlobal("http", http.Http{})
-	vm.SetGlobal("test", test.Tx)
 }
 
 // Execute : execute a js script
