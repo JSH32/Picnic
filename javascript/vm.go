@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	"github.com/Riku32/Picnic/handler/command"
+	"github.com/Riku32/Picnic/stdlib/http"
 	"github.com/Riku32/Picnic/stdlib/logger"
+	"github.com/Riku32/Picnic/stdlib/test"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/eventloop"
 	"github.com/dop251/goja_nodejs/require"
@@ -35,6 +37,8 @@ func NewVM() Vm {
 
 func (vm Vm) setglobals() {
 	vm.SetGlobal("logger", logger.JSLogger{})
+	vm.SetGlobal("http", http.Http{})
+	vm.SetGlobal("test", test.Tx)
 }
 
 // Execute : execute a js script
@@ -45,6 +49,11 @@ func (vm Vm) Execute(command command.Command) {
 			logger.Error(fmt.Sprintf("[%s] %s", command.Prop.Name, err.Error()))
 		}
 	})
+}
+
+// GetCore : for those times when you really need it
+func (vm Vm) GetCore() *eventloop.EventLoop {
+	return vm.runtime
 }
 
 // SetGlobal : set a variable in

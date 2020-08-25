@@ -27,3 +27,8 @@ type Channel struct {
 type User struct {
 	ID string `json:"id"`
 }
+
+type Embed struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+}

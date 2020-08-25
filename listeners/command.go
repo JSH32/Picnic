@@ -9,6 +9,7 @@ import (
 	"github.com/Riku32/Picnic/stdlib/discord"
 	"github.com/Riku32/Picnic/stdlib/logger"
 	"github.com/bwmarrin/discordgo"
+	"github.com/dop251/goja"
 )
 
 type Command struct {
@@ -46,7 +47,10 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 		runtime := javascript.NewVM()
 
 		// set discord library object
-		runtime.SetGlobal("discord", discord.NewDiscordBind(s))
+		runtime.GetCore().Run(func(vm *goja.Runtime) {
+			exf := discord.NewDiscordBind(s, vm)
+			runtime.SetGlobal("discord", exf)
+		})
 
 		// channel object
 		channel := discord.Channel{
