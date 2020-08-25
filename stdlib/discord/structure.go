@@ -29,6 +29,7 @@ type User struct {
 }
 
 type Embed struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Fields      []string `json:"fields"`
 }
