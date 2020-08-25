@@ -18,9 +18,6 @@ type Vm struct {
 func NewVM() Vm {
 	vm := eventloop.NewEventLoop()
 
-	// require.RegisterNativeModule("xf", func(f *goja.Runtime, x *goja.Object) {
-	// 	x.Set("lmao", "sdf")
-	// })
 	nvstore := make(command.ModuleStore)
 	rm := require.NewRegistry(require.WithGlobalFolders("jlib"), require.WithLoader(nvstore.SourceLoader))
 
@@ -32,6 +29,8 @@ func NewVM() Vm {
 	runtime := Vm{
 		runtime: vm,
 	}
+
+	runtime.setglobals()
 
 	return runtime
 }
