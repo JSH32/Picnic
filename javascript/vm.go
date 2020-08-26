@@ -12,7 +12,8 @@ import (
 )
 
 type Vm struct {
-	runtime *eventloop.EventLoop
+	runtime  *eventloop.EventLoop
+	registry *require.Registry
 }
 
 func NewVM() Vm {
@@ -27,7 +28,8 @@ func NewVM() Vm {
 	})
 
 	runtime := Vm{
-		runtime: vm,
+		runtime:  vm,
+		registry: rm,
 	}
 
 	runtime.setglobals()
@@ -35,9 +37,16 @@ func NewVM() Vm {
 	return runtime
 }
 
+// RegisterModule : register a go module, element must be a struct
+func (vm Vm) RegisterModule(name string, element interface{}) {
+	vm.registry.RegisterNativeModule(name, func(runtime *goja.Runtime, object *goja.Object) {
+		(*object.Get("exports").(*goja.Object)) = (*runtime.ToValue(element).ToObject(runtime))
+	})
+}
+
 func (vm Vm) setglobals() {
 	vm.SetGlobal("logger", logger.JSLogger{})
-	vm.SetGlobal("http", http.Http{})
+	vm.RegisterModule("http", http.Http{})
 }
 
 // Execute : execute a js script

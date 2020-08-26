@@ -48,8 +48,7 @@ func (c Command) Handler(s *discordgo.Session, e *discordgo.MessageCreate) {
 
 		// set discord library object
 		runtime.GetCore().Run(func(vm *goja.Runtime) {
-			exf := discord.NewDiscordBind(s, vm)
-			runtime.SetGlobal("discord", exf)
+			runtime.RegisterModule("discord", discord.NewDiscordBind(s, vm))
 		})
 
 		// channel object

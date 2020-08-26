@@ -30,26 +30,6 @@ func (d Discord) SendEmbed(channelid string, embed Embed) {
 	})
 }
 
-// func (c Discord) Embed(call goja.ConstructorCall) *goja.Object {
-// 	var embed Embed
-// 	err := mapstructure.Decode(call.Argument(0).Export(), &embed)
-// 	if err != nil {
-// 		return nil
-// 	}
-
-// 	call.This.Set("title", embed.Title)
-// 	call.This.Set("description", embed.Description)
-
-// 	call.This.Set("send", func(channelid string) {
-// 		c.session.ChannelMessageSendEmbed(channelid, &discordgo.MessageEmbed{
-// 			Title:       call.This.Get("title").String(),
-// 			Description: call.This.Get("description").String(),
-// 		})
-// 	})
-
-// 	return nil
-// }
-
 func (c Discord) Embed(call goja.ConstructorCall) *goja.Object {
 	call.This.Set("setTitle", func(new string) *goja.Object {
 		call.This.Set("title", new)
